@@ -15,7 +15,13 @@ of potential applications
 ```
 pip install -r requirements.txt
 ```
-3. Run the script
+3. Create a file titled 'settings.yaml', and enter your github username and password in the following format
+```
+---
+user: [YOUR_GITHUB_USERNAME_HERE]
+password: [YOUR_GITHUB_PASSWORD_HERE]
+```
+4. Run the script
 ```
 python collect.py
 ```
