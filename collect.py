@@ -23,12 +23,17 @@ write_urls = open('urls.txt', 'w')
 write_urls.truncate()
 
 for repo in results:
-    if db.repo.find({'repoID': repo.id}):
+    if db.repo.find({'repoID': repo.id}) == '':
         pass
     else:
+
+        print ('processing {}').format(repo.id)
         result = db.repo.insert_one({
             "repoID" : repo.id
         })
+
+	print (result)
+
         r = requests.get(repo.html_url)
         '''
         this check is just to make sure that the repo still
