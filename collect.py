@@ -23,7 +23,8 @@ write_urls = open('urls.txt', 'w')
 write_urls.truncate()
 
 for repo in results:
-    if db.repo.find({'repoID': repo.id}) == '':
+    result = db.repo.find({'repoID': repo.id})
+    if result.count() > 0:
         pass
     else:
 
