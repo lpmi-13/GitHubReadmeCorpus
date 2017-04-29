@@ -1,11 +1,9 @@
+import os
 from github import Github
 import requests, base64, yaml
 from pymongo import MongoClient
 
-with open('settings.yaml', 'r') as ymlfile:
-    cfg = yaml.load(ymlfile)
-
-g = Github(cfg['user'], cfg['password'], timeout=200, per_page=30)
+g = Github(os.environ['GITHUB_USERNAME'], os.environ['GITHUB_PASSWORD'], timeout=200, per_page=30)
 
 '''
 this call is the same as hitting the GitHub search API endpoint:
