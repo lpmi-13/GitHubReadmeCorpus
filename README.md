@@ -15,11 +15,10 @@ of potential applications
 ```
 pip install -r requirements.txt
 ```
-3. Create a file titled 'settings.yaml', and enter your github username and password in the following format
+3. Add your github username and password to the local environment variables (if in a linux environment, just type this in the terminal)
 ```
----
-user: [YOUR_GITHUB_USERNAME_HERE]
-password: [YOUR_GITHUB_PASSWORD_HERE]
+GITHUB_USERNAME='YOUR_GITHUB_USERNAME_HERE'
+GITHUB_PASSWORD='YOUR_GITHUB_PASSWORD_HERE'
 ```
 4. Run the script
 ```
