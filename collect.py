@@ -13,7 +13,7 @@ publicly available repository on GitHub
 
 db = MongoClient().github
 
-highest_id = db.repo.find().sort({_id:-1).limit(1)
+highest_id = db.repo.find().sort({'_id':-1).limit(1)
 
 if highest_id > 0:
     id = highest_id
