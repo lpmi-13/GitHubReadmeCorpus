@@ -10,15 +10,23 @@ this call is the same as hitting the GitHub search API endpoint:
 https://api.github.com/repositories, which yields every
 publicly available repository on GitHub
 '''
-results = g.get_repos()
 
 db = MongoClient().github
 
+highest_id = db.repo.find().sort({_id:-1).limit(1)
+
+if highest_id > 0:
+    id = highest_id
+else:
+    id = 0
+
+results = g.get_repos(since=id)
+
 write_text = open('readmeText.txt', 'w')
-write_text.truncate()
+#write_text.truncate()
 
 write_urls = open('urls.txt', 'w')
-write_urls.truncate()
+#write_urls.truncate()
 
 for repo in results:
     result = db.repo.find({'repoID': repo.id})
