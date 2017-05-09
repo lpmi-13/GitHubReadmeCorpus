@@ -13,14 +13,17 @@ publicly available repository on GitHub
 
 db = MongoClient().github
 
-highest_id = db.repo.find().sort({'_id':-1).limit(1)
+highest_repo = list(db.repo.find().sort('_id',-1).limit(1))
 
-if highest_id > 0:
-    id = highest_id
+highest_id = highest_repo[0]['repoID']
+
+
+if highest_id != None and highest_id_> 0:
+    skip_id = highest_id
 else:
-    id = 0
+    skip_id = 0
 
-results = g.get_repos(since=id)
+results = g.get_repos(since=skip_id)
 
 write_text = open('readmeText.txt', 'w')
 #write_text.truncate()
