@@ -20,7 +20,11 @@ pip install -r requirements.txt
 GITHUB_USERNAME='YOUR_GITHUB_USERNAME_HERE'
 GITHUB_PASSWORD='YOUR_GITHUB_PASSWORD_HERE'
 ```
-4. Run the script
+4. add a data directory (or whichever name you like and update that in collect.py)
+```
+mkdir data
+```
+5. Run the script
 ```
 python collect.py
 ```
