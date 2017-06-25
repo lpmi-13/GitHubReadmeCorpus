@@ -1,5 +1,5 @@
 from github import Github
-import requests, base64, yaml
+import requests, base64
 import csv
 import os
 from process import process_id
