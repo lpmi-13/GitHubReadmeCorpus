@@ -1,7 +1,17 @@
-import os
 from github import Github
 import requests, base64, yaml
-from pymongo import MongoClient
+import csv
+import os
+from process import process_id
+
+
+SAVE_DIRECTORY = 'data/'
+highest_repo_id = 0
+
+for fn in os.listdir(SAVE_DIRECTORY):
+    if int(process_id(fn)) > highest_repo_id:
+        highest_repo_id = int(process_id(fn))
+
 
 g = Github(os.environ['GITHUB_USERNAME'], os.environ['GITHUB_PASSWORD'], timeout=200, per_page=30)
 
@@ -11,60 +21,36 @@ https://api.github.com/repositories, which yields every
 publicly available repository on GitHub
 '''
 
-db = MongoClient().github
+print 'highest repo id is ' + str(highest_repo_id)
 
-highest_repo = list(db.repo.find().sort('repoId',-1).limit(1))
+results = g.get_repos(since=highest_repo_id)
 
-highest_id = highest_repo[0]['repoID']
-
-
-if highest_id != None and highest_id_> 0:
-    skip_id = highest_id
-else:
-    skip_id = 0
-
-results = g.get_repos(since=skip_id)
-
-write_text = open('readmeText.txt', 'w')
-#write_text.truncate()
-
-write_urls = open('urls.txt', 'w')
-#write_urls.truncate()
 
 for repo in results:
-    result = db.repo.find({'repoID': repo.id})
-    if result.count() > 0:
-        pass
-    else:
+    print ('processing {}').format(repo.id)
 
-        print ('processing {}').format(repo.id)
-        result = db.repo.insert_one({
-            "repoID" : repo.id
-        })
+    response = requests.get(repo.html_url)
+    '''
+    this check is just to make sure that the repo still
+    exists. It might not be needed, though omitting this
+    check has caused issues in past projects using the GitHub
+    API, so leaving it in for now
+    '''
+    if response.headers.get('status') is not int(404):
+        print 'processing README for ' + repo.html_url + '...'
 
-	print (result)
+        try:
+            readme = repo.get_readme() or ''
+            data = base64.b64decode(readme.content)
+        except:
+            data = ''
 
-        r = requests.get(repo.html_url)
-        '''
-        this check is just to make sure that the repo still
-        exists. It might not be needed, though omitting this
-        check has caused issues in past projects using the GitHub
-        API, so leaving it in for now
-        '''
-        if r.headers.get('status') is not int(404):
-            print 'processing README for ' + repo.html_url + '...'
-            #writes each repository url to urls.txt
-            write_urls.write(repo.html_url)
-            write_urls.write('\n')
+        #writes the readme text, if it exists, to a csv file 
+        filename = 'repo-{}.csv'.format(repo.id)
+        path_to_file = SAVE_DIRECTORY + filename
 
-            try:
-                readme = repo.get_readme() or ''
-                data = base64.b64decode(readme.content)
-            except:
-                data = ''
-
-            #writes the readme text, if it exists, to readmeText.txt
-            write_text.write(data)
-            write_text.write('\n\n')
+        with open(path_to_file, 'wb') as csvfile:
+            filewriter = csv.writer(csvfile, delimiter=',', escapechar='~', quoting=csv.QUOTE_NONE)
+            filewriter.writerow([repo.id, data])
 
 print 'all done!'
