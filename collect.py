@@ -49,8 +49,10 @@ for repo in results:
         filename = 'repo-{}.csv'.format(repo.id)
         path_to_file = SAVE_DIRECTORY + filename
 
+        clean_data = data.replace('\n', '')
+
         with open(path_to_file, 'wb') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',', escapechar='~', quoting=csv.QUOTE_NONE)
-            filewriter.writerow([repo.id, data])
+            filewriter.writerow([repo.id, clean_data])
 
 print 'all done!'
