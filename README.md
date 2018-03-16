@@ -1,6 +1,8 @@
 # GitHubReadmeCorpus
 A project to compile a corpus of all github README documentation in English
 
+Currently compatible with Python3
+
 ## Aim
 a corpus of all publicly available README documentation from GitHub has a number
 of potential applications
@@ -17,8 +19,8 @@ pip install -r requirements.txt
 ```
 3. Add your github username and password to the local environment variables (if in a linux environment, just type this in the terminal)
 ```
-GITHUB_USERNAME='YOUR_GITHUB_USERNAME_HERE'
-GITHUB_PASSWORD='YOUR_GITHUB_PASSWORD_HERE'
+export GITHUB_USERNAME=YOUR_GITHUB_USERNAME_HERE
+export GITHUB_PASSWORD=YOUR_GITHUB_PASSWORD_HERE
 ```
 4. add a data directory (or whichever name you like and update that in collect.py)
 ```

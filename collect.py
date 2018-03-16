@@ -1,10 +1,10 @@
 from github import Github
-import requests, base64
+import requests
 import csv
 import os
 from datetime import datetime
 from rateLimit import return_rate_limit
-from process import process_id
+from process import process_id, extract_string_content
 
 
 SAVE_DIRECTORY = 'data/'
@@ -23,20 +23,20 @@ https://api.github.com/repositories, which yields every
 publicly available repository on GitHub
 '''
 
-print 'highest repo id is ' + str(highest_repo_id)
+print('highest repo id is ' + str(highest_repo_id))
 
 results = g.get_repos(since=highest_repo_id)
 
 
 for repo in results:
-    print ('processing {}').format(repo.id)
+    print ('processing {}'.format(repo.id))
 
     #check rate limit
     rate = return_rate_limit(g)
     print('remaining API calls this hour: {}'.format(rate))
     print('{}'.format(str(datetime.now())))
 
-    if(rate > 250):
+    if(rate > 250 and not repo.fork):
 
         response = requests.get(repo.html_url)
         '''
@@ -46,22 +46,16 @@ for repo in results:
         API, so leaving it in for now
         '''
         if response.headers.get('status') is not int(404):
-            print 'processing README for ' + repo.html_url + '...'
-    
-            try:
-                readme = repo.get_readme() or ''
-                data = base64.b64decode(readme.content)
-            except:
-                data = ''
+            print('processing README for ' + repo.html_url + '...')
+
+            readme_data = extract_string_content(repo)
     
             #writes the readme text, if it exists, to a csv file 
             filename = 'repo-{}.csv'.format(repo.id)
             path_to_file = SAVE_DIRECTORY + filename
-    
-            clean_data = data.replace('\n', '')
-    
-            with open(path_to_file, 'wb') as csvfile:
+
+            with open(path_to_file, 'wt') as csvfile:
                 filewriter = csv.writer(csvfile, delimiter=',', escapechar='~', quoting=csv.QUOTE_NONE)
-                filewriter.writerow([repo.id, clean_data])
+                filewriter.writerow([repo.id, readme_data])
     
-print 'all done!'
+print('all done!')
