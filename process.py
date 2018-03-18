@@ -16,8 +16,4 @@ def extract_string_content(repo):
 
     string_data = str(data)
 
-    clean_data = string_data.replace('\n', '')
-
-    return clean_data
-
-    
+    return string_data.replace('\n', '')
