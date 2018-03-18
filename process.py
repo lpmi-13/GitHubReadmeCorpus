@@ -14,6 +14,6 @@ def extract_string_content(repo):
     except:
         data = ''
 
-    string_data = str(data)
+    string_data = str(data, 'utf-8')
 
     return string_data.replace('\n', '')
