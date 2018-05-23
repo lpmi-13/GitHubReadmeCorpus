@@ -12,7 +12,6 @@ def extract_string_content(repo):
         readme = repo.get_readme() or ''
         data = readme.decoded_content
         string_data = str(data, 'utf-8')
-        string_data = string_data.replace('\n','')
     except:
         string_data = ''
 
