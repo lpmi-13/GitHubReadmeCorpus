@@ -40,6 +40,8 @@ docker build -t corpus_collector .
 
 2. run it
 
+> be sure to `export GITHUB_TOKEN=YOUR_TOKEN_HERE` prior to running this.
+
 ```
 docker run -it --rm -v $(pwd)/data:/app/data -e GITHUB_TOKEN=$GITHUB_TOKEN corpus_collector
 ```
