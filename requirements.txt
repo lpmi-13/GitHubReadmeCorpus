@@ -1,7 +1,7 @@
-PyGithub==1.37
-PyJWT==1.6.0
+PyGithub==1.55
+PyJWT==2.4.0
 certifi==2018.1.18
 chardet==3.0.4
 idna==2.6
-requests==2.20.0
+requests==2.26.0
 urllib3==1.24.2

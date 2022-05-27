@@ -6,4 +6,4 @@ bin
 pip-selfcheck.json
 data
 *.pyc
-env
+.env

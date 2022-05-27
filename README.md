@@ -17,10 +17,9 @@ of potential applications
 ```
 pip install -r requirements.txt
 ```
-3. Add your github username and password to the local environment variables (if in a linux environment, just type this in the terminal)
+3. Create a github token and add it to the environment variables (if in a linux environment, just type this in the terminal)
 ```
-export GITHUB_USERNAME=YOUR_GITHUB_USERNAME_HERE
-export GITHUB_PASSWORD=YOUR_GITHUB_PASSWORD_HERE
+export GITHUB_TOKEN=YOUR_GITHUB_TOKEN_HERE
 ```
 4. add a data directory (or whichever name you like and update that in collect.py)
 ```
@@ -30,3 +29,19 @@ mkdir data
 ```
 python collect.py
 ```
+
+## Docker method
+
+1. build the container
+
+```
+docker build -t corpus_collector .
+```
+
+2. run it
+
+```
+docker run -it --rm -v $(pwd)/data:/app/data -e GITHUB_TOKEN=$GITHUB_TOKEN corpus_collector
+```
+
+The data should wind up in the local `./data` dir so you can stop the container and start it again later without needing to re-process all the readmes from the start.
