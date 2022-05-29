@@ -38,27 +38,31 @@ for repo in results:
     print(f'remaining API calls this hour: {rate}')
     print(f'{str(datetime.now())}')
 
+    # we should probably also filter out archived repos...but maybe not?
     if(rate > 250 and not repo.fork):
 
-        response = requests.get(repo.html_url)
-        '''
-        this check is just to make sure that the repo still
-        exists. It might not be needed, though omitting this
-        check has caused issues in past projects using the GitHub
-        API, so leaving it in for now
-        '''
-        if response.headers.get('status') is not int(404):
-            print(f'processing README for {repo.html_url}...')
+        try:
+            response = requests.get(repo.html_url)
+            '''
+            this check is just to make sure that the repo still
+            exists. It might not be needed, though omitting this
+            check has caused issues in past projects using the GitHub
+            API, so leaving it in for now
+            '''
+            if response.headers.get('status') is not int(404):
+                print(f'processing README for {repo.html_url}...')
 
-            readme_data = extract_string_content(repo)
+                readme_data = extract_string_content(repo)
 
-            #writes the readme text, if it exists, to a csv file
-            filename = f'repo-{repo.id}.csv'
-            path_to_file = SAVE_DIRECTORY + filename
+                #writes the readme text, if it exists, to a csv file
+                filename = f'repo-{repo.id}.csv'
+                path_to_file = SAVE_DIRECTORY + filename
 
-            with open(path_to_file, 'wt') as csvfile:
-                filewriter = csv.writer(csvfile, delimiter=',', escapechar='~', quoting=csv.QUOTE_NONE)
-                filewriter.writerow([repo.id, readme_data])
+                with open(path_to_file, 'wt') as csvfile:
+                    filewriter = csv.writer(csvfile, delimiter=',', escapechar='~', quoting=csv.QUOTE_NONE)
+                    filewriter.writerow([repo.id, readme_data])
+        except:
+            print(f'error getting {repo.html_url}, so skipping it')
 
 # very ambitious...we'll probably never get here
 print('all done!')
